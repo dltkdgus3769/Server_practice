@@ -11,5 +11,6 @@
 </h1>
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
+        <button><a href="/login/input">Login 입력창</a></button>
 </body>
 </html>
