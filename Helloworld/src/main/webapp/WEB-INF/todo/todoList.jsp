@@ -14,6 +14,9 @@
 <body>
 <h1>todoList 목록화면</h1>
 <a href="/todo/register">글쓰기 폼 이동</a>
+<h1>todoRead 하나 조회</h1>
+<a href="/todo/read?tno=5">하나 조회 이동</a>
+
 <h2>더미 데이터 단순 출력</h2>
 ${list}
 <h2>JSTL 연습장</h2>

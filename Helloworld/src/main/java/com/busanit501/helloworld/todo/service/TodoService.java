@@ -24,4 +24,12 @@ public enum TodoService {
                 }).collect(Collectors.toList());
         return todoList;
     }
+    public TodoDTO getone(Long tno){
+        TodoDTO todoDTO =new TodoDTO();
+        todoDTO.setTno(5L);
+        todoDTO.setTitle("하나 조회 더미 데이터");
+        todoDTO.setDueDate(LocalDate.now());
+
+        return todoDTO;
+    }
 }

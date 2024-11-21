@@ -1,4 +1,4 @@
-package com.busanit501.helloworld.menu;
+package com.busanit501.helloworld.menu.controller;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
