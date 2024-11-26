@@ -1,7 +1,6 @@
 package com.busanit501.helloworld.jdbcex.dao;
 
 import com.busanit501.helloworld.jdbcex.vo.TodoVO;
-import com.sun.tools.javac.comp.Todo;
 import lombok.Cleanup;
 
 import java.sql.*;
