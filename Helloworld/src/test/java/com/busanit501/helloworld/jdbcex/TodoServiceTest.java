@@ -42,4 +42,21 @@ public class TodoServiceTest {
         log.info(todoDTO);
     }
 
+    //수정 테스트
+    @Test
+    public void testUpdate() throws SQLException {
+        TodoDTO todoDTO = TodoDTO.builder()
+                .tno(1L)
+                .title("수정 샘플 작업 1127")
+                .dueDate(LocalDate.now())
+                .build();
+        todoService.update(todoDTO);
+    }
+
+    //삭제 테스트
+    @Test
+    public void testDelete() throws SQLException {
+        todoService.delete(1L);
+    }
+
 }

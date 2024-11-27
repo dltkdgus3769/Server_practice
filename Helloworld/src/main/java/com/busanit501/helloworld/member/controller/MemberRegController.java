@@ -1,8 +1,8 @@
-package com.busanit501.helloworld.jdbcex.controller;
+package com.busanit501.helloworld.member.controller;
 
-import com.busanit501.helloworld.jdbcex.dto.TodoDTO;
-import com.busanit501.helloworld.jdbcex.service.TodoService;
 
+import com.busanit501.helloworld.member.dto.MemberDTO;
+import com.busanit501.helloworld.member.service.MemberService;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,31 +14,31 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@WebServlet(name="TodoReg2Controller", urlPatterns = "/todo/register2")
-public class TodoReg2Controller extends HttpServlet {
-    private TodoService todoService = TodoService.INSTANCE;
+@WebServlet(name="MemberRegController", urlPatterns = "/member/register")
+public class MemberRegController extends HttpServlet {
+    private MemberService memberService = MemberService.INSTANCE;
     private final DateTimeFormatter Date_Time_Format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/todo/todoReg2.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/memberReg.jsp");
         dispatcher.forward(request,response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //PRG 패턴
-        //POST 처리 후, Redirect, GET 호출, 무한 POST 방지효과
-        TodoDTO todoDTO = TodoDTO.builder()
-                .title(request.getParameter("title"))
-                .dueDate(LocalDate.parse(request.getParameter("dueDate"),Date_Time_Format))
+        MemberDTO memberDTO = MemberDTO.builder()
+                .name(request.getParameter("name"))
+                .birthdate(LocalDate.parse(request.getParameter("birthdate"),Date_Time_Format))
+                .tel(request.getParameter("tel"))
                 .build();
+
         try {
-            todoService.register(todoDTO);
+            memberService.register(memberDTO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("doPost: 글쓰기 처리하는 로직, 디비 연결 전, 리스트로 이동함");
-        response.sendRedirect("/todo/list2");
+
+        response.sendRedirect("/member/list");
     }
 }

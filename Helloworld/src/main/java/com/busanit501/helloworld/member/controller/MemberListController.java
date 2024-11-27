@@ -1,36 +1,37 @@
-package com.busanit501.helloworld.jdbcex.controller;
+package com.busanit501.helloworld.member.controller;
 
 
 import com.busanit501.helloworld.jdbcex.dto.TodoDTO;
 import com.busanit501.helloworld.jdbcex.service.TodoService;
+import com.busanit501.helloworld.member.dto.MemberDTO;
+import com.busanit501.helloworld.member.service.MemberService;
 import lombok.extern.log4j.Log4j2;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Log4j2
-@WebServlet(name="TodoList2Controller", urlPatterns = "/todo/list2")
-public class TodoList2Controller extends HttpServlet {
-    private TodoService todoService = TodoService.INSTANCE;
+@WebServlet(name="MemberListController", urlPatterns = "/member/list")
+public class MemberListController extends HttpServlet {
+    private MemberService memberService = MemberService.INSTANCE;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
 
-        log.info("doGet TodoList2Controller 확인");
-        List<TodoDTO> todoList = null;
+        log.info("doGet MemberListController 확인");
+        List<MemberDTO> memberList = null;
         try {
-            todoList = todoService.listAll();
-            request.setAttribute("list",todoList);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/todo/todoList2.jsp");
+            memberList = memberService.listAll();
+            request.setAttribute("list",memberList);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/memberList.jsp");
             dispatcher.forward(request,response);
         } catch (SQLException e) {
             throw new RuntimeException(e);

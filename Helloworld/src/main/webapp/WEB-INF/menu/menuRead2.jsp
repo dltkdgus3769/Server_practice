@@ -19,10 +19,10 @@
     <input type="text" name="title" value="${dto.menu}" placeholder="메뉴 입력 해주세요." readonly>
 </div>
 <div>
-    <input type="text" name="price" value="${dto.price}">
+    <input type="text" name="price" value="${dto.price}" readonly>
 </div>
 <div>
-    <input type="text" name="description" value="${dto.description}">
+    <input type="text" name="description" value="${dto.description}" readonly>
 </div>
 <div>
     <a href ="/menu/update?tno=${dto.tno}">수정/삭제</a>

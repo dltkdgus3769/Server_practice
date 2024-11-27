@@ -53,4 +53,18 @@ public enum TodoService {
         TodoDTO todoDTO = modelMapper.map(todoVO,TodoDTO.class);
         return todoDTO;
     }
+
+    //4
+    // 수정하기
+    public void update(TodoDTO todoDTO) throws SQLException {
+        log.info("todoDTO:"+todoDTO);
+        TodoVO todoVO = modelMapper.map(todoDTO,TodoVO.class);
+        todoDAO.updateOne(todoVO);
+
+    }
+
+    //5 삭제 기능.
+    public void delete(Long tno) throws SQLException {
+        todoDAO.deleteTodo(tno);
+    }
 }
