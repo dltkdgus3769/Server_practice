@@ -44,7 +44,7 @@ public class TodoUpdateController extends HttpServlet {
         String finished = request.getParameter("finished");
         log.info("finished : " + finished);
         boolean checkFinished = false;
-        if(finished.equals("on")) {
+        if(finished.equals("on") {
             checkFinished = true;
         }
         TodoDTO todoDTO = TodoDTO.builder()
