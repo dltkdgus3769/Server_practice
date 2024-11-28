@@ -76,4 +76,6 @@ public enum MemberService {
     public void delete(Long mno) throws SQLException {
         memberDAO.deleteMember(mno);
     }
+
+
 }

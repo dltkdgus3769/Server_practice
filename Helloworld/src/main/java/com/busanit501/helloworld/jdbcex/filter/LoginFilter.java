@@ -34,6 +34,8 @@ public class LoginFilter implements Filter {
             return;
         }
 
+
+
         if(session.getAttribute("loginInfo") != null){
             MemberDTO memberDTO = (MemberDTO) session.getAttribute("loginInfo");
             log.info("result: "+memberDTO);
