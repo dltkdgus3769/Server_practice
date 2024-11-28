@@ -13,6 +13,12 @@
 </head>
 <body>
 <h1>menuList 목록화면</h1>
+
+<h2>${MenuloginInfo.mname}님 환영합니다.</h2>
+<form action="/menuLogout" method="post">
+    <button type="submit">로그아웃테스트</button>
+</form>
+
 <a href="/menu/register2">메뉴 등록 폼 이동</a>
 <h1>menuList 하나 조회 화면</h1>
 <a href="/menu/read2?tno=1">메뉴 하나 조회 이동</a>

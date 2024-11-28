@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @Log4j2
-@WebServlet(name="LoginController", urlPatterns = "/login")
-public class LoginController extends HttpServlet {
+@WebServlet(name = "MenuLoginController", urlPatterns = "/menuLogin")
+public class MenuLoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.info("로그인 컨트롤러 입니다.");
-        request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/menu/menuLogin.jsp").forward(request,response);
     }
     //로직 처리
     @Override
@@ -30,11 +30,12 @@ public class LoginController extends HttpServlet {
         try {
             MemberDTO memberDTO = MemberService.INSTANCE.login(mid,mpw);
             HttpSession session = request.getSession();
-            session.setAttribute("loginInfo", memberDTO);
-            response.sendRedirect("/todo/list2");
+            session.setAttribute("MenuloginInfo", memberDTO);
+            response.sendRedirect("/menu/list2");
 
         } catch (SQLException e) {
-            response.sendRedirect("/login?result=error");
+            response.sendRedirect("/menuLogin?result=error");
         }
     }
 }
+

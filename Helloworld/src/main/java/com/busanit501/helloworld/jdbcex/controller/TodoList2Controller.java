@@ -23,8 +23,6 @@ public class TodoList2Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
-
         log.info("doGet TodoList2Controller 확인");
         List<TodoDTO> todoList = null;
         try {

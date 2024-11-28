@@ -13,6 +13,11 @@
 </head>
 <body>
 <h1>jdbcex의 todoList 목록화면</h1>
+<h2>${loginInfo.mname}님 환영합니다.</h2>
+${loginInfo}
+<form action="/logout" method="post">
+    <button type="submit">로그아웃테스트</button>
+</form>
 <a href="/todo/register2">글쓰기 폼 이동</a>
 <h1>todoRead 하나 조회</h1>
 <a href="/todo/read2?tno=5">하나 조회 이동</a>

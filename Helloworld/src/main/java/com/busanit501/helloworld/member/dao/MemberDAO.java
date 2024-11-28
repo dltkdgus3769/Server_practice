@@ -13,7 +13,7 @@ public class MemberDAO {
 
     public void insert(MemberVO memberVO) throws SQLException {
 
-        String sql = "insert into tbl_member (name, birthdate, tel) values (?, ?, ?)";
+        String sql = "insert into tbl_member2 (name, birthdate, tel) values (?, ?, ?)";
         @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
         @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, memberVO.getName());
@@ -23,7 +23,7 @@ public class MemberDAO {
     } //insert
 
     public List<MemberVO> selectAll() throws SQLException {
-        String sql = "select * from tbl_member";
+        String sql = "select * from tbl_member2";
         List<MemberVO> list = new ArrayList<>();
         @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
         @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -43,7 +43,7 @@ public class MemberDAO {
     }
 
     public MemberVO selectOne(Long mno) throws SQLException {
-        String sql = "select * from tbl_member where mno = ?";
+        String sql = "select * from tbl_member2 where mno = ?";
         @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
         @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setLong(1, mno);
@@ -80,6 +80,26 @@ public class MemberDAO {
         @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setLong(1, mno);
         preparedStatement.executeUpdate();
+    }
+
+    public MemberVO getMemberWithMpw(Long mno) throws SQLException {
+        String query = "select * from tbl_member2 where mno=?";
+        MemberVO memberVO = null;
+
+        @Cleanup Connection connection = ConnectionUtil.INSTANCE.getConnection();
+        @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setLong(1, mno);
+
+        @Cleanup ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        memberVO = MemberVO.builder()
+                .mno(resultSet.getLong("mno"))
+                .name(resultSet.getString("name"))
+                .birthdate(resultSet.getDate("birthdate").toLocalDate())
+                .tel((resultSet.getString("tel")))
+                .build();
+
+        return memberVO;
     }
 
 

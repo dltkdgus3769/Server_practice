@@ -65,6 +65,13 @@ public enum MemberService {
 
     }
 
+    public MemberDTO login(Long mno) throws SQLException {
+        MemberVO memberVO= memberDAO.getMemberWithMpw(mno);
+        MemberDTO memberDTO=modelMapper.map(memberVO, MemberDTO.class);
+
+        return memberDTO;
+    }
+
     //5 삭제 기능.
     public void delete(Long mno) throws SQLException {
         memberDAO.deleteMember(mno);
