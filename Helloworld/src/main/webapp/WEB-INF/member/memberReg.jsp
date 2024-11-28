@@ -11,7 +11,7 @@
     <title>Title</title>
   </head>
   <body>
-  <h1>jdbcex - 멤버 등록 폼 화면</h1>
+  <h1>멤버 등록 폼 화면</h1>
   <form action="/member/register" method="post">
       <div>
           <input type="text" name="name" placeholder="이름 입력">
@@ -20,7 +20,7 @@
           <input type="date" name="birthdate">
       </div>
       <div>
-          <input type="text" name="tel">
+          <input type="text" name="tel" placeholder="휴대폰 번호 입력">
       </div>
       <button type="reset">리셋</button>
       <button type="submit">등록</button>

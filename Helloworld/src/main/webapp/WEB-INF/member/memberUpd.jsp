@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: it
   Date: 24. 11. 27.
-  Time: 오후 4:11
+  Time: 오전 10:26
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<h1>jdbcex - mno 번호로 수정</h1>
+<h1>멤버 수정</h1>
 <form action="/member/update?mno=${dto.mno}" method="post">
     <div>
         <input type="text" name="mno" value="${dto.mno}" readonly>
@@ -23,7 +23,7 @@
         <input type="date" name="birthdate" value="${dto.birthdate}">
     </div>
     <div>
-        <input type="text" name="tel" value="${dto.tel}" >
+        <input type="text" name="tel" value="${dto.tel}">
     </div>
 
     <div>
@@ -34,6 +34,6 @@
 <form action="/member/delete?mno=${dto.mno}" method="post">
     <button type="submit">삭제</button>
 </form>
-<a href="/member/list">목록가기</a>
+<a href="/todo/list2">목록가기</a>
 </body>
 </html>

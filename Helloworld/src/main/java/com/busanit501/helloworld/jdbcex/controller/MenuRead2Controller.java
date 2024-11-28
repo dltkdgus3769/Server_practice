@@ -3,7 +3,6 @@ package com.busanit501.helloworld.jdbcex.controller;
 
 
 import com.busanit501.helloworld.jdbcex.dto.MenuDTO;
-import com.busanit501.helloworld.jdbcex.dto.TodoDTO;
 import com.busanit501.helloworld.jdbcex.service.MenuService;
 
 import javax.servlet.RequestDispatcher;

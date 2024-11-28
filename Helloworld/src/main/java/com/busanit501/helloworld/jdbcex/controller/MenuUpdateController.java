@@ -1,5 +1,6 @@
 package com.busanit501.helloworld.jdbcex.controller;
 
+
 import com.busanit501.helloworld.jdbcex.dto.MenuDTO;
 import com.busanit501.helloworld.jdbcex.service.MenuService;
 import lombok.extern.log4j.Log4j2;
@@ -12,8 +13,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @Log4j2
-@WebServlet(name="menuUpdateController", urlPatterns = "/menu/update")
-public class menuUpdateController extends HttpServlet {
+@WebServlet(name="MenuUpdateController", urlPatterns = "/menu/update")
+public class MenuUpdateController extends HttpServlet {
     private MenuService menuService = MenuService.INSTANCE;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
