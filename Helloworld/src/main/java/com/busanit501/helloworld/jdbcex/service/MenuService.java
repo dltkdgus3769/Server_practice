@@ -67,4 +67,6 @@ public enum MenuService {
     public void delete(Long tno) throws SQLException {
         menuDAO.deleteMenu(tno);
     }
+
+
 }

@@ -14,7 +14,7 @@
 <body>
 <h1>menuList 목록화면</h1>
 
-<h2>${MenuloginInfo.mname}님 환영합니다.</h2>
+<h2>${menuLoginInfo.mname}님 환영합니다.</h2>
 <form action="/menuLogout" method="post">
     <button type="submit">로그아웃테스트</button>
 </form>

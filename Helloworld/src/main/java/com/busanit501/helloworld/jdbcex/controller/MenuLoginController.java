@@ -6,12 +6,10 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 @Log4j2
 @WebServlet(name = "MenuLoginController", urlPatterns = "/menuLogin")
@@ -27,8 +25,21 @@ public class MenuLoginController extends HttpServlet {
         log.info("로그인컨트롤러 doPost");
         String mid = request.getParameter("mid");
         String mpw = request.getParameter("mpw");
+        String auto = request.getParameter("auto");
+        boolean rememberMe = auto != null && auto.equals("on");
         try {
             MemberDTO memberDTO = MemberService.INSTANCE.login(mid,mpw);
+            if (rememberMe) {
+                String uuid = UUID.randomUUID().toString();
+                MemberService.INSTANCE.updateUuid(mid, uuid);
+                memberDTO.setUuid(uuid);
+
+                Cookie rememberCookie = new Cookie("MenuRememberMe", uuid);
+                rememberCookie.setPath("/");
+                rememberCookie.setMaxAge(60*60*24*7);
+                response.addCookie(rememberCookie);
+            }
+
             HttpSession session = request.getSession();
             session.setAttribute("MenuloginInfo", memberDTO);
             response.sendRedirect("/menu/list2");

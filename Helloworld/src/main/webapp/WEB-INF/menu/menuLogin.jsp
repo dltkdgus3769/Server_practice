@@ -22,6 +22,7 @@ ${loginInfo}
 <form action="/menuLogin" method="post">
     <input type="text" name="mid">
     <input type="text" name="mpw">
+    <input type="checkbox" name="auto">자동로그인
     <button type="submit">로그인</button>
 </form>
 </body>

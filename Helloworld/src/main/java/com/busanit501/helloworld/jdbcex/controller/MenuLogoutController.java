@@ -21,7 +21,7 @@ public class MenuLogoutController extends HttpServlet {
         log.info("LoginController doPost ");
 
         HttpSession session = request.getSession();
-        session.removeAttribute("loginInfo");
+        session.removeAttribute("MenuLoginInfo");
         session.invalidate();
 
         response.sendRedirect("/menu/login");

@@ -12,6 +12,7 @@
 </head>
 <body>
 <h1>jdbcex - tno 번호로 하나 조회하는 화면, 상세보기</h1>
+임시 서블릿 컨텍스트의 애플리케이션 공간에 저장된 변수 조회 : ${appTestName}
 <div>
     <input type="text" name="tno" value="${dto.tno}" readonly>
 </div>
