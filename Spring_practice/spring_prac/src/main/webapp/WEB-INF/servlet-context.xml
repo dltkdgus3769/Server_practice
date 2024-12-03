@@ -16,5 +16,15 @@
     </bean>
 
     <context:component-scan base-package="com.busanit501.spring_prac.controller"/>
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <bean class="com.busanit501.spring_prac.controller.formatter.LocalDateFormatter"></bean>
+            </set>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven conversion-service="conversionService"/>
 </beans>
 

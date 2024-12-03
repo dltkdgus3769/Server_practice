@@ -14,15 +14,22 @@ import java.time.LocalDate;
 @Log4j2
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations ="file:src/main/webapp/WEB-INF/root-context.xml")
-public class TimeMapperTest {
+public class TodoMapperTest {
 
     @Autowired(required = false)
-    private TimeMapper2 timeMapper;
+    private TodoMapper todoMapper;
 
     @Test
     public void testGetTime(){
-        log.info("getNow:"+timeMapper.getNow());
+        log.info("getTime:"+todoMapper.getTime());
     }
 
-
+    @Test
+    public void testInsert(){
+        TodoVO todoVO = TodoVO.builder()
+                .title("샘플 테스트")
+                .dueDate(LocalDate.now())
+                .writer("이상현").build();
+        todoMapper.insert(todoVO);
+    }
 }

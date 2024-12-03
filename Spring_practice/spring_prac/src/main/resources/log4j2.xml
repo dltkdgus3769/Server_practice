@@ -15,7 +15,8 @@
     <Appenders>
 <!--        출력 대상 콘솔-->
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}-%msg%n"/>
+<!--            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}-%msg%n"/>-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %msg%n"/>
         </Console>
         <!--        추가 부분-->
 <!--출력 대상 파일-->
@@ -33,8 +34,8 @@
             <AppenderRef ref="Console" level="info"/>
         </Logger>
         <!--        추가 부분-->
-        <logger name="com.busanit501.spring_prac.mapper" level="TRACE" additivity="false">
-            <appender-ref ref = "console"/>
+        <logger name="com.busanit501.spring_prac.mapper" level="trace" additivity="false">
+            <AppenderRef ref = "Console"/>
         </logger>
 
 <!--        전체 설정 기본적으로 INFO 이상일 때 로그를 출력하게 설정-->

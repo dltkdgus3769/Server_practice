@@ -1,38 +1,37 @@
 package com.busanit501.spring_prac.controller;
 
+
+import com.busanit501.spring_prac.dto.FoodDTO;
 import com.busanit501.spring_prac.dto.TodoDTO;
-import jdk.vm.ci.meta.Local;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 
-
 @Controller
+@RequestMapping("/food")
 @Log4j2
-public class SampleController {
-    @GetMapping("/hello")
-    public void hello() {
-
-        log.info("hello");
+public class FoodController {
+    @RequestMapping("/list")
+    public void list() {
+        log.info("list:화면제공은 해당 메서드 명으로 제공");
     }
 
-    @GetMapping("/hello2")
-    public String hello2() {
-
-        log.info("hello2");
-        return "helloTest";
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public void register() {
+        log.info("register:화면제공은 해당 메서드 명으로 제공");
     }
 
-    @GetMapping("/foodList")
-    public String foodList() {
-
-        log.info("foodList");
-        return "/food/list";
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public void registerPost(FoodDTO foodDTO) {
+        log.info("register Post 로직 처리");
+        log.info("FoodController register post foodDTO:"+foodDTO);
     }
 
     @GetMapping("/ex1")
@@ -63,9 +62,9 @@ public class SampleController {
     }
 
     @GetMapping("/ex5")
-    //localhost:8080/ex5?title=lsh&writer=이상현
-    public void ex5(TodoDTO todoDTO, Model model){
-        log.info("ex5:"+todoDTO);
+    //localhost:8080/food/ex5?title=lsh&writer=이상현
+    public void ex5(FoodDTO foodDTO , Model model){
+        log.info("ex5:"+foodDTO);
 
     }
 
@@ -82,12 +81,5 @@ public class SampleController {
     public void ex7(String msg, Model model){
         log.info("ex7:");
         model.addAttribute("msg",msg);
-    }
-
-    @GetMapping("/ex8")
-    public void ex8(String name, int age){
-        log.info("ex8 name:"+name);
-        log.info("ex8 age:"+age);
-
     }
 }
