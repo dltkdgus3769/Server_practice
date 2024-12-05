@@ -99,8 +99,8 @@
                                 <%--                                    출력할 페이지 개수,10개--%>
                                 <c:forEach begin="${pageResponseDTO.start}" end="${pageResponseDTO.end}" var="num">
 
-                                    <li class="page-item ${pageResponseDTO.page == num ? "active":""}" data-num ="${num}">
-                                        <a class="page-link" href="">${num}</a>
+                                    <li class="page-item ${pageResponseDTO.page == num ? "active":""}" >
+                                        <a class="page-link" data-num ="${num}">${num}</a>
                                     </li>
 
                                 </c:forEach>
