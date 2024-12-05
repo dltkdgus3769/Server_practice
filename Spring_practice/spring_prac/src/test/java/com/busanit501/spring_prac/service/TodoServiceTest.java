@@ -1,8 +1,9 @@
 package com.busanit501.spring_prac.service;
 
 
+import com.busanit501.spring_prac.dto.PageRequestDTO;
+import com.busanit501.spring_prac.dto.PageResponseDTO;
 import com.busanit501.spring_prac.dto.TodoDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Log4j2
 @ExtendWith(SpringExtension.class)
@@ -34,6 +36,49 @@ public class TodoServiceTest {
                 .writer("이상현").build();
 
         todoService.register(todoDTO);
+    }
+
+    @Test
+    public void testGetAll(){
+        List<TodoDTO> list= todoService.getAll();
+        for(TodoDTO todoDTO:list){
+            log.info("todoDTO:"+todoDTO);
+        }
+    }
+
+    @Test
+    public void testGetOne(){
+        TodoDTO todoDTO = todoService.getOne(1L);
+        log.info("todoDTO:"+todoDTO);
+    }
+
+    @Test
+    public void testDelete(){
+        todoService.delete(2L);
+    }
+
+    @Test
+    public void testUpdate(){
+        TodoDTO todoDTO = TodoDTO.builder()
+                .tno(6L)
+                .title("업데이트 테스트2")
+                .dueDate(LocalDate.now())
+                .finished(true).
+                build();
+        todoService.update(todoDTO);
+    }
+
+    @Test
+    public void testPageList(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(201)
+                .size(10)
+                .build();
+        PageResponseDTO<TodoDTO> list = todoService.getListWithPage(pageRequestDTO);
+        log.info("list:"+list);
+        list.getDtolist().stream().forEach(dto-> log.info("dto:"+dto));
+
+
     }
 
 

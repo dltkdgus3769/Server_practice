@@ -1,6 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -57,36 +57,43 @@
                         Featured
                     </div>
                     <div class="card-body">
-                        <%--                        Food List 부분 작성--%>
-                        <h5 class="card-title">리스트 목록</h5>
-                            <button type="button" class="btn btn-primary insertFoodBtn">글쓰기</button>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <%--                                    소제목--%>
-                                <th scope="col">Fno</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Writer</th>
-                                <th scope="col">DueDate</th>
-                                <th scope="col">Finished</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                        <%--                        Food 입력 폼 여기에 작성--%>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Tno</span>
+                            <input type="text" name="fno" class="form-control" readonly
+                                   value=
+                                   <c:out value="${foodDTO.fno}"></c:out>>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Title</span>
+                            <input type="text" name="title" class="form-control" readonly
+                                   value="<c:out value="${foodDTO.title}"></c:out>">
+                        </div>
 
-                            <%--                                본문--%>
-                            <c:forEach items="${list}" var="dto">
-                                <tr>
-                                    <th scope="row"><c:out value="${dto.fno}"></c:out></th>
-                                    <td><a href="/food/read?fno=${dto.fno}" class="text-decoration-none"><c:out value="${dto.title}"></c:out></a></td>
-                                    <td><c:out value="${dto.writer}"></c:out></td>
-                                    <td><c:out value="${dto.dueDate}"></c:out></td>
-                                    <td><c:out value="${dto.finished}"></c:out></td>
-                                </tr>
-                            </c:forEach>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">DueDate</span>
+                            <input type="date" name="dueDate" class="form-control" readonly
+                                   value=<c:out value="${foodDTO.dueDate}"></c:out>>
+                        </div>
 
-                            </tbody>
-                        </table>
-                        <%--                        Food List 부분 작성--%>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Writer</span>
+                            <input type="text" name="writer" class="form-control" readonly
+                                   value=<c:out value="${foodDTO.writer}"></c:out>>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="form-check-label">Finished &nbsp</label>
+                            <input type="checkbox" name="finished" class="form-check-input" readonly
+                            ${foodDTO.finished ? "checked" : ""}>
+                        </div>
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button type="button" class="btn btn-primary">수정하기</button>
+                                <button type="button" class="btn btn-secondary">목록가기</button>
+                            </div>
+                        </div>
+                        <%--                        Todo 입력 폼 여기에 작성--%>
+
                     </div>
                 </div>
                 <!--        카드 끝 부분-->
@@ -95,9 +102,9 @@
         </div>
         <!--        class="row content"-->
     </div>
-    <div class="row content">
-        <h1>Content</h1>
-    </div>
+    <%--    <div class="row content">--%>
+    <%--        <h1>Content</h1>--%>
+    <%--    </div>--%>
     <div class="row footer">
         <!--        <h1>Footer</h1>-->
         <div class="row fixed-bottom" style="z-index: -100">
@@ -107,20 +114,33 @@
         </div>
     </div>
 </div>
+<%--입력 폼에 관련 유효성 체크, 서버로부터  erros 키로 값을 받아오면, --%>
+<%--자바스크립 콘솔에 임시 출력.--%>
 <script>
-    const serverValidResult = {}
+    const serverValidResult = {};
+    // jstl , 반복문으로, 서버로부터 넘어온 여러 에러 종류가 많습니다.
+    //     하나씩 꺼내서, 출력하는 용도.,
     <c:forEach items="${errors}" var="error">
     serverValidResult['${error.getField()}'] = '${error.defaultMessage}'
     </c:forEach>
     console.log(serverValidResult)
 </script>
+<%--목록가기 및 수정폼 가기 이벤트 리스너--%>
 <script>
-    document.querySelector(".insertFoodBtn").addEventListener("click",
+    // 수정폼
+    document.querySelector(".btn-primary").addEventListener("click",
         function (e){
-            // 글쓰기폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
-            self.location = "/food/register"
+            // 수정폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
+            self.location = "/food/update?fno="+${foodDTO.fno}
+                ,false})
+    // 목록
+    document.querySelector(".btn-secondary").addEventListener("click",
+        function (e){
+            // 수정폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
+            self.location = "/food/list"
                 ,false})
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

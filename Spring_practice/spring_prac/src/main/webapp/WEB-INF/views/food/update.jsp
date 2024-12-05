@@ -1,6 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -57,31 +57,47 @@
                         Featured
                     </div>
                     <div class="card-body">
-                        <%--todo 입력폼 시작--%>
-                        <form action="/todo/register" method="post">
+                        <%--                        Todo 입력 폼 여기에 작성--%>
+                        <form action="/food/update" method="post">
                             <div class="input-group mb-3">
-                                <span class="input-group-text">Tile</span>
-                                <input type="text" name="title" class="form-control" placeholder="제목 입력해주세요">
+                                <span class="input-group-text">Tno</span>
+                                <input type="text" name="fno" class="form-control" readonly
+                                       value=
+                                <c:out value="${foodDTO.fno}"></c:out>>
                             </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Title</span>
+                                <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요"
+                                       value=
+                                '<c:out value="${foodDTO.title}"></c:out>'>
+                            </div>
+
                             <div class="input-group mb-3">
                                 <span class="input-group-text">DueDate</span>
-                                <input type="date" name="dueDate" class="form-control">
+                                <input type="date" name="dueDate" class="form-control"
+                                       value=<c:out value="${foodDTO.dueDate}"></c:out>>
                             </div>
+
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Writer</span>
-                                <input type="text" name="writer" class="form-control" placeholder="작성자 입력해주세요">
+                                <input type="text" name="writer" class="form-control" readonly
+                                       value=<c:out value="${foodDTO.writer}"></c:out>>
                             </div>
                             <div class="input-group mb-3">
-                                <span class="form-check-label">Finished</span>
-                                <input type="checkbox" name="finished" class="form-check-input">
+                                <label class="form-check-label">Finished &nbsp</label>
+                                <input type="checkbox" name="finished" class="form-check-input"
+                                ${foodDTO.finished ? "checked" : ""}>
                             </div>
                             <div class="my-4">
                                 <div class="float-end">
-                                    <button type="submit" class="btn btn-primary">글작성</button>
-                                    <button type="reset" class="btn btn-secondary">초기화</button>
+                                    <button type="button" class="btn btn-primary">적용하기</button>
+                                    <button type="button" class="btn btn-danger">삭제하기</button>
+                                    <button type="button" class="btn btn-secondary">목록가기</button>
                                 </div>
                             </div>
                         </form>
+                        <%--                        Todo 입력 폼 여기에 작성--%>
+
                     </div>
                 </div>
                 <!--        카드 끝 부분-->
@@ -90,9 +106,9 @@
         </div>
         <!--        class="row content"-->
     </div>
-    <div class="row content">
-        <h1>Content</h1>
-    </div>
+    <%--    <div class="row content">--%>
+    <%--        <h1>Content</h1>--%>
+    <%--    </div>--%>
     <div class="row footer">
         <!--        <h1>Footer</h1>-->
         <div class="row fixed-bottom" style="z-index: -100">
@@ -102,12 +118,49 @@
         </div>
     </div>
 </div>
+
 <script>
-    const serverValidResult={}
+    const serverValidResult = {};
     <c:forEach items="${errors}" var="error">
-        serverValidResult['${error.getField()}'] = '${error.defaultMessage}'
+    serverValidResult['${error.getField()}'] = '${error.defaultMessage}'
     </c:forEach>
     console.log(serverValidResult)
+</script>
+<script>
+    // 수정폼
+    document.querySelector(".btn-primary").addEventListener("click",
+        function (e) {
+            self.location = "/food/update?fno=" +${foodDTO.fno}
+                , false
+        })
+    // 목록
+    document.querySelector(".btn-secondary").addEventListener("click",
+        function (e) {
+            self.location = "/food/list"
+                , false
+        })
+
+    //\삭제 기능
+    document.querySelector(".btn-danger").addEventListener("click",
+        function (e) {
+            const formObj = document.querySelector("form")
+
+            e.preventDefault()
+            e.stopPropagation()
+            formObj.action="/food/delete"
+            formObj.method="post"
+            formObj.submit()
+
+        },false)
+    document.querySelector(".btn-primary").addEventListener("click",
+        function (e) {
+            const formObj = document.querySelector("form")
+            e.preventDefault()
+            e.stopPropagation()
+            formObj.action = "/food/update"
+            formObj.method = "post"
+            formObj.submit()
+        }, false)
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

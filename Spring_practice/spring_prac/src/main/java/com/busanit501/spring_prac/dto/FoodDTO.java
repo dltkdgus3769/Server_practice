@@ -1,18 +1,24 @@
 package com.busanit501.spring_prac.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class FoodDTO {
-    private long fno;
+    private Long fno;
+    @NotEmpty// 빈 문자열, 공백 없이, 값이 존재해야함
     private String title;
+//    @Future // 미래 날짜만
     private LocalDate dueDate;
     private boolean finished;
+    @NotEmpty
     private String writer;
 }
