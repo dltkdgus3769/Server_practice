@@ -71,12 +71,18 @@ public class TodoServiceTest {
     @Test
     public void testPageList(){
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(201)
+                .page(1)
                 .size(10)
+                .keyword("수정")
+                .types(new String[]{"t","w"})
+//                .types(null)
+                .finished(false)
+                .from(LocalDate.of(2024,12,05))
+                .to(LocalDate.of(2024,12,06))
                 .build();
-        PageResponseDTO<TodoDTO> list = todoService.getListWithPage(pageRequestDTO);
+        PageResponseDTO<TodoDTO> list = todoService.selectList(pageRequestDTO);
         log.info("list:"+list);
-        list.getDtolist().stream().forEach(dto-> log.info("dto:"+dto));
+        list.getDtoList().stream().forEach(dto-> log.info("dto:"+dto));
 
 
     }

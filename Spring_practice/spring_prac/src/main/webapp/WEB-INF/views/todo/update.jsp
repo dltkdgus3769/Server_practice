@@ -59,6 +59,8 @@
                     <div class="card-body">
                         <%--                        Todo 입력 폼 여기에 작성--%>
                         <form action="/todo/update" method="post">
+                            <input type="hidden" name="page" value="${pageRequestDTO.page}">
+                            <input type="hidden" name="size" value="${pageRequestDTO.size}">
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Tno</span>
                                 <input type="text" name="tno" class="form-control" readonly
@@ -68,8 +70,7 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Title</span>
                                 <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요"
-                                       value=
-                                <c:out value="${todoDTO.title}"></c:out>>
+                                       value='<c:out value="${todoDTO.title}"></c:out>'>
                             </div>
 
                             <div class="input-group mb-3">
@@ -128,6 +129,14 @@
     serverValidResult['${error.getField()}'] = '${error.defaultMessage}'
     </c:forEach>
     console.log(serverValidResult)
+
+    const serverValidResult2 = {};
+    // jstl , 반복문으로, 서버로부터 넘어온 여러 에러 종류가 많습니다.
+    //     하나씩 꺼내서, 출력하는 용도.,
+    <c:forEach items="${errors2}" var="error">
+    serverValidResult2['${error.getField()}'] = '${error.defaultMessage}'
+    </c:forEach>
+    console.log(serverValidResult2)
 </script>
 <%--목록가기 및 수정폼 가기 이벤트 리스너--%>
 <script>
@@ -142,7 +151,7 @@
     document.querySelector(".btn-secondary").addEventListener("click",
         function (e) {
             // 수정폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
-            self.location = "/todo/list"
+            self.location = "/todo/list?${pageRequestDTO.link}"
                 , false
         })
 

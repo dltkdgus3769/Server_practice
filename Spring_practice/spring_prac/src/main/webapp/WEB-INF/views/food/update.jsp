@@ -59,8 +59,10 @@
                     <div class="card-body">
                         <%--                        Todo 입력 폼 여기에 작성--%>
                         <form action="/food/update" method="post">
+                            <input type="hidden" name="page" value="${pageRequestDTO.page}">
+                            <input type="hidden" name="size" value="${pageRequestDTO.size}">
                             <div class="input-group mb-3">
-                                <span class="input-group-text">Tno</span>
+                                <span class="input-group-text">Fno</span>
                                 <input type="text" name="fno" class="form-control" readonly
                                        value=
                                 <c:out value="${foodDTO.fno}"></c:out>>
@@ -130,13 +132,13 @@
     // 수정폼
     document.querySelector(".btn-primary").addEventListener("click",
         function (e) {
-            self.location = "/food/update?fno=" +${foodDTO.fno}
+            self.location = "/food/update?fno="+${foodDTO.fno}
                 , false
         })
     // 목록
     document.querySelector(".btn-secondary").addEventListener("click",
         function (e) {
-            self.location = "/food/list"
+            self.location = "/food/list?${pageRequestDTO.link}"
                 , false
         })
 

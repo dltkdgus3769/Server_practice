@@ -39,7 +39,7 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public PageResponseDTO<TodoDTO> getListWithPage(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<TodoDTO> selectList(PageRequestDTO pageRequestDTO) {
         int total = todoMapper.getCount(pageRequestDTO);
         List<TodoDTO> dtolist = todoMapper.selectList(pageRequestDTO).stream()
                 .map(vo->modelMapper.map(vo,TodoDTO.class))
@@ -52,6 +52,10 @@ public class TodoServiceImpl implements TodoService{
         
         return pageResponseDTO;
     }
+
+
+
+
 
     @Override
     public TodoDTO getOne(Long tno) {

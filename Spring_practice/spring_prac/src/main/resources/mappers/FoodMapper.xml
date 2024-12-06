@@ -29,4 +29,12 @@
         update tbl_food set title = #{title}, dueDate = #{dueDate}, finished = #{finished}
         where fno = #{fno}
     </update>
+
+    <select id="selectList" resultType="com.busanit501.spring_prac.domain.FoodVO">
+        select * from tbl_food order by fno desc limit #{skip} ,#{size}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(fno) from tbl_food;
+    </select>
 </mapper>

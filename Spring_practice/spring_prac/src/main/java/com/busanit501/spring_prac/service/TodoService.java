@@ -13,7 +13,9 @@ public interface TodoService {
     List<TodoDTO> getAll();
 
     //페이징 처리된 목록
-    PageResponseDTO<TodoDTO> getListWithPage(PageRequestDTO pageRequestDTO);
+//    PageResponseDTO<TodoDTO> getListWithPage(PageRequestDTO pageRequestDTO);
+
+    PageResponseDTO<TodoDTO> selectList(PageRequestDTO pageRequestDTO);
 
     TodoDTO getOne(Long tno);
 

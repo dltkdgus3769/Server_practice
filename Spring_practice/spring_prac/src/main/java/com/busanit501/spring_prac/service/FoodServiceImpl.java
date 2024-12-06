@@ -2,6 +2,8 @@ package com.busanit501.spring_prac.service;
 
 import com.busanit501.spring_prac.domain.FoodVO;
 import com.busanit501.spring_prac.dto.FoodDTO;
+import com.busanit501.spring_prac.dto.PageRequestDTO;
+import com.busanit501.spring_prac.dto.PageResponseDTO;
 import com.busanit501.spring_prac.mapper.FoodMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +34,21 @@ public class FoodServiceImpl implements FoodService{
                 .collect(Collectors.toList());
 
         return list;
+    }
+
+    @Override
+    public PageResponseDTO<FoodDTO> getListWithPage(PageRequestDTO pageRequestDTO) {
+        int total = foodMapper.getCount(pageRequestDTO);
+        List<FoodDTO> dtolist = foodMapper.selectList(pageRequestDTO).stream()
+                .map(vo->modelMapper.map(vo,FoodDTO.class))
+                .collect(Collectors.toList());
+
+        PageResponseDTO<FoodDTO> pageResponseDTO = PageResponseDTO.<FoodDTO>withAll()
+                .total(total)
+                .dtolist(dtolist)
+                .pageRequestDTO(pageRequestDTO).build();
+
+        return pageResponseDTO;
     }
 
     @Override

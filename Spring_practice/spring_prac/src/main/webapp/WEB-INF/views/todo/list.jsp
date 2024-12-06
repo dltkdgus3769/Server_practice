@@ -9,8 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
+
 <body>
 <div class="container-fluid">
+
+
     <div class="row">
         <!--        <h1>Header</h1>-->
         <!--        네비게이션바 추가 시작-->
@@ -46,16 +49,52 @@
             </div>
         </div>
         <!--        네비게이션바 추가 끝-->
-
+        <%--    검색 및 필터 화면 추가--%>
+        <div class="row content">
+            <div class="col">
+                <!--        카드 시작 부분-->
+                <div class="card">
+                    <%--                <div class="card-header">--%>
+                    <%--                    검색 및 필터--%>
+                    <%--                </div>--%>
+                    <div class="card-body">
+                        <h5 class="card-title">검색 및 필터</h5>
+                        <form action="/todo/list" method="get">
+                            <input type="hidden" name="size" value="${pageRequestDTO.size}">
+                            <div class="mb-3">
+                                <input type="checkbox" name="finished">완료여부
+                            </div>
+                            <div class="mb-3">
+                                <input type="checkbox" name="types" value="t">제목
+                                <input type="checkbox" name="types" value="w">작성자
+                                <input type="text" name="keyword" class="form-control">
+                            </div>
+                            <div class="input-group mb-3 dueDateDiv">
+                                <input type="date" name="from" class="form-control">
+                                <input type="date" name="to" class="form-control">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="float-end">
+                                    <button class="btn btn-primary" type="submit">검색</button>
+                                    <button class="btn btn-secondary" type="reset">초기화</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--        카드 끝 부분-->
+            </div>
+        </div>
+        <%--    검색 및 필터 화면 추가--%>
         <!--        class="row content"-->
         <div class="row content">
             <!--        col-->
             <div class="col">
                 <!--        카드 시작 부분-->
                 <div class="card">
-                    <div class="card-header">
-                        Featured
-                    </div>
+<%--                    <div class="card-header">--%>
+<%--                        Featured--%>
+<%--                    </div>--%>
                     <div class="card-body">
                         <%--                        Todo List 부분 작성--%>
                         <h5 class="card-title">리스트 목록</h5>
@@ -77,7 +116,8 @@
                             <c:forEach items="${pageResponseDTO.dtoList}" var="dto">
                                 <tr>
                                     <th scope="row"><c:out value="${dto.tno}"></c:out></th>
-                                    <td><a href="/todo/read?tno=${dto.tno}" class="text-decoration-none"><c:out
+                                    <td><a href="/todo/read?tno=${dto.tno}&${pageRequestDTO.link}"
+                                           class="text-decoration-none"><c:out
                                             value="${dto.title}"></c:out></a></td>
                                     <td><c:out value="${dto.writer}"></c:out></td>
                                     <td><c:out value="${dto.dueDate}"></c:out></td>
@@ -93,14 +133,14 @@
                                 <%--                                    이전 버튼--%>
                                 <c:if test="${pageResponseDTO.prev}">
                                     <li class="page-item">
-                                        <a class="page-link" data-num ="${pageResponseDTO.page - 1}">Previous</a>
+                                        <a class="page-link" data-num="${pageResponseDTO.end - 10}">Previous</a>
                                     </li>
                                 </c:if>
                                 <%--                                    출력할 페이지 개수,10개--%>
                                 <c:forEach begin="${pageResponseDTO.start}" end="${pageResponseDTO.end}" var="num">
 
-                                    <li class="page-item ${pageResponseDTO.page == num ? "active":""}" >
-                                        <a class="page-link" data-num ="${num}">${num}</a>
+                                    <li class="page-item ${pageResponseDTO.page == num ? "active":""}">
+                                        <a class="page-link" data-num="${num}">${num}</a>
                                     </li>
 
                                 </c:forEach>
@@ -108,7 +148,7 @@
                                 <%--                                    다음 버튼--%>
                                 <c:if test="${pageResponseDTO.next}">
                                     <li class="page-item">
-                                        <a class="page-link" data-num ="${pageResponseDTO.end + 1}">Next</a>
+                                        <a class="page-link" data-num="${pageResponseDTO.end + 1}">Next</a>
                                     </li>
                                 </c:if>
                             </ul>
@@ -151,20 +191,20 @@
     //페이지네이션, 이동할 페이지 번호 data-num
     //해당 번호를 가지고, 링크 이동하는 이벤트 추가.
     document.querySelector(".pagination").addEventListener("click",
-        function (e){
+        function (e) {
             e.preventDefault()
             e.stopPropagation()
             //a 태그에 접근 하려면, 해당 요소 선택자 필요.
             const target = e.target
             // a 태그인 경우에 이벤트 리슨너 동작
-            if(target.tagName !== "A"){
+            if (target.tagName !== "A") {
                 return
             }
             const num = target.getAttribute("data-num")
 
             //백틱, 숫자 키보드 1번 왼쪽
-            self.location= `/todo/list?page=\${num}`
-        },false)
+            self.location = `/todo/list?page=\${num}`
+        }, false)
 
 
 </script>

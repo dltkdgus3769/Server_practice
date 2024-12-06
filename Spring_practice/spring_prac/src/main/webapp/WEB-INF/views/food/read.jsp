@@ -83,7 +83,7 @@
                         </div>
                         <div class="input-group mb-3">
                             <label class="form-check-label">Finished &nbsp</label>
-                            <input type="checkbox" name="finished" class="form-check-input" readonly
+                            <input type="checkbox" name="finished" class="form-check-input"  onClick="return false"
                             ${foodDTO.finished ? "checked" : ""}>
                         </div>
                         <div class="my-4">
@@ -131,13 +131,13 @@
     document.querySelector(".btn-primary").addEventListener("click",
         function (e){
             // 수정폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
-            self.location = "/food/update?fno="+${foodDTO.fno}
+            self.location = "/food/update?fno=${foodDTO.fno}&${pageRequestDTO.link}"
                 ,false})
     // 목록
     document.querySelector(".btn-secondary").addEventListener("click",
         function (e){
             // 수정폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
-            self.location = "/food/list"
+            self.location = "/food/list?${pageRequestDTO.link}"
                 ,false})
 </script>
 

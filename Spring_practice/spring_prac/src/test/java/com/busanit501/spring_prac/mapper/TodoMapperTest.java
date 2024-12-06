@@ -70,6 +70,12 @@ public class TodoMapperTest {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
                 .page(2)
                 .size(10)
+                .keyword("샘플")
+                .types(new String[]{"t","w"})
+//                .types(null)
+                .finished(true)
+                .from(LocalDate.of(2024,12,05))
+                .to(LocalDate.of(2024,12,06))
                 .build();
 
         List<TodoVO> list= todoMapper.selectList(pageRequestDTO);
@@ -81,8 +87,16 @@ public class TodoMapperTest {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
                 .page(1)
                 .size(10)
+                .keyword("수정")
+                .types(new String[]{"t","w"})
+//                .types(null)
+                .finished(false)
+                .from(LocalDate.of(2024,12,05))
+                .to(LocalDate.of(2024,12,06))
                 .build();
+
         int total = todoMapper.getCount(pageRequestDTO);
         log.info("total : "+total);
     }
+
 }

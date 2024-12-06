@@ -58,8 +58,8 @@
                     </div>
                     <div class="card-body">
                         <%--                        Food List 부분 작성--%>
-                        <h5 class="card-title">리스트 목록</h5>
-                            <button type="button" class="btn btn-primary insertFoodBtn">글쓰기</button>
+                        <h5 class="card-title">Food 리스트 목록</h5>
+                        <button type="button" class="btn btn-primary insertFoodBtn">글쓰기</button>
                         <table class="table">
                             <thead>
                             <tr>
@@ -74,10 +74,11 @@
                             <tbody>
 
                             <%--                                본문--%>
-                            <c:forEach items="${list}" var="dto">
+                            <c:forEach items="${pageResponseDTO.dtoList}" var="dto">
                                 <tr>
                                     <th scope="row"><c:out value="${dto.fno}"></c:out></th>
-                                    <td><a href="/food/read?fno=${dto.fno}" class="text-decoration-none"><c:out value="${dto.title}"></c:out></a></td>
+                                    <td><a href="/food/read?fno=${dto.fno}&${pageRequestDTO.link}" class="text-decoration-none"><c:out
+                                            value="${dto.title}"></c:out></a></td>
                                     <td><c:out value="${dto.writer}"></c:out></td>
                                     <td><c:out value="${dto.dueDate}"></c:out></td>
                                     <td><c:out value="${dto.finished}"></c:out></td>
@@ -86,6 +87,32 @@
 
                             </tbody>
                         </table>
+                        <%--                        Food List 부분 작성--%>
+                        <div class="float-end">
+                            <ul class="pagination">
+                                <%--                                    이전 버튼--%>
+                                <c:if test="${pageResponseDTO.prev}">
+                                    <li class="page-item">
+                                        <a class="page-link" data-num="${pageResponseDTO.end - 10}">Previous</a>
+                                    </li>
+                                </c:if>
+                                <%--                                    출력할 페이지 개수,10개--%>
+                                <c:forEach begin="${pageResponseDTO.start}" end="${pageResponseDTO.end}" var="num">
+
+                                    <li class="page-item ${pageResponseDTO.page == num ? "active":""}">
+                                        <a class="page-link" data-num="${num}">${num}</a>
+                                    </li>
+
+                                </c:forEach>
+
+                                <%--                                    다음 버튼--%>
+                                <c:if test="${pageResponseDTO.next}">
+                                    <li class="page-item">
+                                        <a class="page-link" data-num="${pageResponseDTO.end + 1}">Next</a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </div>
                         <%--                        Food List 부분 작성--%>
                     </div>
                 </div>
@@ -116,10 +143,27 @@
 </script>
 <script>
     document.querySelector(".insertFoodBtn").addEventListener("click",
-        function (e){
+        function (e) {
             // 글쓰기폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
             self.location = "/food/register"
-                ,false})
+                , false
+        })
+
+    document.querySelector(".pagination").addEventListener("click",
+        function (e){
+            e.preventDefault()
+            e.stopPropagation()
+            //a 태그에 접근 하려면, 해당 요소 선택자 필요.
+            const target = e.target
+            // a 태그인 경우에 이벤트 리슨너 동작
+            if(target.tagName !== "A"){
+                return
+            }
+            const num = target.getAttribute("data-num")
+
+            //백틱, 숫자 키보드 1번 왼쪽
+            self.location= `/food/list?page=\${num}`
+        },false)
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
