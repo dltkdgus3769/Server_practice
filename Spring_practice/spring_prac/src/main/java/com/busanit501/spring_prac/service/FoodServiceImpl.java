@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class FoodServiceImpl implements FoodService{
+public class FoodServiceImpl implements FoodService {
 
     private final FoodMapper foodMapper;
     private final ModelMapper modelMapper;
@@ -30,17 +30,31 @@ public class FoodServiceImpl implements FoodService{
     @Override
     public List<FoodDTO> getAll() {
         List<FoodDTO> list = foodMapper.selectAll().stream()
-                .map(vo->modelMapper.map(vo,FoodDTO.class))
+                .map(vo -> modelMapper.map(vo, FoodDTO.class))
                 .collect(Collectors.toList());
 
         return list;
     }
 
+    //    @Override
+//    public PageResponseDTO<FoodDTO> getListWithPage(PageRequestDTO pageRequestDTO) {
+//        int total = foodMapper.getCount(pageRequestDTO);
+//        List<FoodDTO> dtolist = foodMapper.selectList(pageRequestDTO).stream()
+//                .map(vo->modelMapper.map(vo,FoodDTO.class))
+//                .collect(Collectors.toList());
+//
+//        PageResponseDTO<FoodDTO> pageResponseDTO = PageResponseDTO.<FoodDTO>withAll()
+//                .total(total)
+//                .dtolist(dtolist)
+//                .pageRequestDTO(pageRequestDTO).build();
+//
+//        return pageResponseDTO;
+//    }
     @Override
-    public PageResponseDTO<FoodDTO> getListWithPage(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<FoodDTO> selectList(PageRequestDTO pageRequestDTO) {
         int total = foodMapper.getCount(pageRequestDTO);
         List<FoodDTO> dtolist = foodMapper.selectList(pageRequestDTO).stream()
-                .map(vo->modelMapper.map(vo,FoodDTO.class))
+                .map(vo -> modelMapper.map(vo, FoodDTO.class))
                 .collect(Collectors.toList());
 
         PageResponseDTO<FoodDTO> pageResponseDTO = PageResponseDTO.<FoodDTO>withAll()
@@ -52,21 +66,21 @@ public class FoodServiceImpl implements FoodService{
     }
 
     @Override
-    public FoodDTO getOne(Long fno){
+    public FoodDTO getOne(Long fno) {
         FoodVO foodVO = foodMapper.selectOne(fno);
-        FoodDTO foodDTO = modelMapper.map(foodVO,FoodDTO.class);
+        FoodDTO foodDTO = modelMapper.map(foodVO, FoodDTO.class);
         return foodDTO;
     }
 
     @Override
-    public void delete(Long fno){
+    public void delete(Long fno) {
         foodMapper.delete(fno);
 
     }
 
     @Override
     public void update(FoodDTO foodDTO) {
-        FoodVO foodVO = modelMapper.map(foodDTO,FoodVO.class);
+        FoodVO foodVO = modelMapper.map(foodDTO, FoodVO.class);
         foodMapper.update(foodVO);
 
     }

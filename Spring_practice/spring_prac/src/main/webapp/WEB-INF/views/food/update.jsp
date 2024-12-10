@@ -149,7 +149,7 @@
 
             e.preventDefault()
             e.stopPropagation()
-            formObj.action="/food/delete"
+            formObj.action="/food/delete?${pageRequestDTO.link}"
             formObj.method="post"
             formObj.submit()
 
@@ -159,7 +159,7 @@
             const formObj = document.querySelector("form")
             e.preventDefault()
             e.stopPropagation()
-            formObj.action = "/food/update"
+            formObj.action = "/food/update?${pageRequestDTO.link}"
             formObj.method = "post"
             formObj.submit()
         }, false)

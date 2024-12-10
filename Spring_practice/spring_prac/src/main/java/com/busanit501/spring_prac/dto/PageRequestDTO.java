@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Data
 @Builder
@@ -35,7 +38,7 @@ public class PageRequestDTO {
     //2 검색 유형
     private String[] types;
     //3 todo 완료 여부
-    private boolean finished;
+    private boolean finished2;
     //4. 기한
     private LocalDate from;
     private LocalDate to;
@@ -46,15 +49,43 @@ public class PageRequestDTO {
         return (page - 1) * size;
     }
 
-    public String getLink() {
-        if(link==null){
+    public String getLink()  {
+
             StringBuilder builder = new StringBuilder();
             builder.append("page="+this.page);
             builder.append("&size="+this.size);
-            link = builder.toString();
-        }
-        return link;
+            if(finished2){
+                builder.append("&finished2=on");
+            }
+            if(types != null&&types.length>0){
+                for(int i =0;i<types.length;i++){
+                    builder.append("&types="+types[i]);
+                }
+            }
+            if(keyword!=null && !keyword.isEmpty()){
+                try {
+                    builder.append("&keyword="+ URLEncoder.encode(keyword, "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+//          throw new RuntimeException(e);
+                    e.printStackTrace();
+                }
+            }
+            if(from!=null){
+                builder.append("&from="+from.toString());
+            }
+            if(to!=null){
+                builder.append("&to="+to.toString());
+            }
+
+        return builder.toString();
     }
 
+    //검색 조건 확인하는 기능.
+    public boolean checkType(String type){
+        if(types==null || types.length==0){
+            return false;
+        }
+        return Arrays.stream(types).anyMatch(type::equals);
+    }
 
 }

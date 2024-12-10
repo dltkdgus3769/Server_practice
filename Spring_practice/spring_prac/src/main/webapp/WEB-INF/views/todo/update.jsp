@@ -144,7 +144,7 @@
     document.querySelector(".btn-primary").addEventListener("click",
         function (e) {
             // 수정폼으로 가야함. 그러면, 필요한 준비물 tno 번호가 필요함
-            self.location = "/todo/update?tno=" +${todoDTO.tno}
+            self.location = "/todo/update?tno="+${todoDTO.tno}
                 , false
         })
     // 목록
@@ -162,7 +162,8 @@
 
             e.preventDefault()
             e.stopPropagation()
-            formObj.action="/todo/delete"
+            //삭제 후에도 검색 내역 유지
+            formObj.action="/todo/delete?${pageRequestDTO.link}"
             formObj.method="post"
             formObj.submit()
 
@@ -176,7 +177,7 @@
             e.preventDefault()
             e.stopPropagation() // 상위 태그로 전파 방지
 
-            formObj.action = "/todo/update"
+            formObj.action = "/todo/update?${pageRequestDTO.link}"
             formObj.method = "post"
             // todoDTO 모든 멤버가 같이 전달됨.
             // tno, title, dueDate, finished, writer

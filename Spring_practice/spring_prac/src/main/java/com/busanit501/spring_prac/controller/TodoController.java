@@ -138,7 +138,7 @@ public class TodoController {
             redirectAttributes.addAttribute("tno",todoDTO.getTno());
             redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
             redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-            return "redirect:/todo/update";
+            return "redirect:/todo/update?"+pageRequestDTO.getLink();
         }
         if (pageBindingResult.hasErrors()) {
             log.info("has errors : 유효성 에러가 발생함.PageRequestDTO");
@@ -147,7 +147,7 @@ public class TodoController {
             redirectAttributes.addAttribute("tno",todoDTO.getTno());
             redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
             redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-            return "redirect:/todo/update";
+            return "redirect:/todo/update?"+pageRequestDTO.getLink();
         }
 
         // 수정하는 로직 필요함.
@@ -157,16 +157,16 @@ public class TodoController {
         todoService.update(todoDTO);
         redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
         redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-        return "redirect:/todo/list";
+        return "redirect:/todo/list?"+pageRequestDTO.getLink();
     }
 
     //삭제
     @PostMapping("/delete")
     public String delete(Long tno, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
         todoService.delete(tno);
-        redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
-        redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-        return "redirect:/todo/list";
+//        redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
+//        redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
+        return "redirect:/todo/list?"+pageRequestDTO.getLink();
     }
 
     //페이징

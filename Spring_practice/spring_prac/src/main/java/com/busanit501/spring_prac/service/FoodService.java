@@ -19,6 +19,7 @@ public interface FoodService {
     void update(FoodDTO foodDTO);
 
     //페이징 처리된 목록
-    PageResponseDTO<FoodDTO> getListWithPage(PageRequestDTO pageRequestDTO);
+//    PageResponseDTO<FoodDTO> getListWithPage(PageRequestDTO pageRequestDTO);
 
+    PageResponseDTO<FoodDTO> selectList(PageRequestDTO pageRequestDTO);
 }

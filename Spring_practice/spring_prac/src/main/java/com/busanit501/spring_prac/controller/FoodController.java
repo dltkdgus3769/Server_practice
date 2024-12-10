@@ -26,15 +26,24 @@ public class FoodController {
 
     @RequestMapping("/list")
 //    public void list(Model model) {
-    public void list(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
+    public String list(@Valid PageRequestDTO pageRequestDTO,
+                       BindingResult bindingResult,
+                       RedirectAttributes redirectAttributes,
+                       Model model) {
         log.info("FoodController list : 화면제공은 해당 메서드 명으로 제공함.");
-
         if (bindingResult.hasErrors()) {
-            pageRequestDTO = PageRequestDTO.builder().build();
+            log.info("has errors : 유효성 에러가 발생함.");
+            // 1회용으로, 웹 브라우저에서, errors , 키로 조회 가능함. -> 뷰 ${errors}
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/food/list";
         }
-        PageResponseDTO<FoodDTO> pageResponseDTO = foodService.getListWithPage(pageRequestDTO);
-        log.info("FoodController list 데이터 유무 확인:" + pageResponseDTO);
+        PageResponseDTO<FoodDTO> pageResponseDTO = foodService.selectList(pageRequestDTO);
+        log.info("FoodController list 데이터 유무 확인 :" + pageResponseDTO);
+        //데이터 탑재. 서버 -> 웹
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
+        return "/food/list";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -63,49 +72,88 @@ public class FoodController {
 
     //상세조회,
     @RequestMapping("/read")
-    public void read(Long fno, Model model, @Valid PageRequestDTO pageRequestDTO) {
+    public String read(Long fno, Model model, @Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("has errors : 유효성 에러가 발생함.");
+            // 1회용으로, 웹 브라우저에서, errors , 키로 조회 가능함. -> 뷰 ${errors}
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addAttribute("fno", fno);
+            redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+            redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
+            return "redirect:/food/read";
+        }
+
+
         log.info("FoodController read :");
         FoodDTO foodDTO = foodService.getOne(fno);
         log.info("FoodController read 데이터 유무 확인:" + foodDTO);
         model.addAttribute("foodDTO", foodDTO);
+        return "/food/read";
     }
 
 
     @RequestMapping("/update")
-    public void update(Long fno, Model model,@Valid PageRequestDTO pageRequestDTO) {
+    public String update(Long fno, Model model,@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("FoodController update :");
+        if (bindingResult.hasErrors()) {
+            log.info("has errors : 유효성 에러가 발생함.");
+            // 1회용으로, 웹 브라우저에서, errors , 키로 조회 가능함. -> 뷰 ${errors}
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addAttribute("fno", fno);
+//            redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
+//            redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
+            return "redirect:/food/update";
+        }
         FoodDTO foodDTO = foodService.getOne(fno);
         log.info("FoodController update 데이터 유무 확인 :" + foodDTO);
         //데이터 탑재. 서버 -> 웹
         model.addAttribute("foodDTO", foodDTO);
-
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
+        return "/food/update";
     }
 
     @PostMapping("/update")
-    public String updateLogic(@Valid FoodDTO foodDTO, BindingResult bindingResult,PageRequestDTO pageRequestDTO,
+    public String updateLogic(@Valid FoodDTO foodDTO, BindingResult bindingResult, @Valid PageRequestDTO pageRequestDTO, BindingResult pageBindingResult,
                               RedirectAttributes redirectAttributes) {
+
+        // 유효성 체크 -> 유효성 검증시, 통과 안된 원인이 있다면,
         if (bindingResult.hasErrors()) {
-            log.info("has errors : 유효성 에러가 발생함.");
+            log.info("has errors : 유효성 에러가 발생함.FoodDTO");
+            // 1회용으로, 웹 브라우저에서, errors , 키로 조회 가능함. -> 뷰 ${errors}
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             redirectAttributes.addAttribute("fno",foodDTO.getFno());
             redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
             redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-            return "redirect:/food/update";
+            return "redirect:/food/update?"+pageRequestDTO.getLink();
         }
+        if (pageBindingResult.hasErrors()) {
+            log.info("has errors : 유효성 에러가 발생함.PageRequestDTO");
+            // 1회용으로, 웹 브라우저에서, errors , 키로 조회 가능함. -> 뷰 ${errors}
+            redirectAttributes.addFlashAttribute("errors2", bindingResult.getAllErrors());
+            redirectAttributes.addAttribute("fno",foodDTO.getFno());
+            redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
+            redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
+            return "redirect:/food/update?"+pageRequestDTO.getLink();
+        }
+
+        // 수정하는 로직 필요함.
+        // 주의사항, 체크박스의 값의 문자열 on 전달 받습니다.
         log.info("foodDTO확인 finished의 변환 여부 확인. : " + foodDTO);
+
         foodService.update(foodDTO);
         redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
         redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-        return "redirect:/food/list";
+        return "redirect:/food/list?"+pageRequestDTO.getLink();
     }
 
     //삭제
     @PostMapping("/delete")
-    public String delete(Long fno,PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
+    public String delete(Long fno, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
         foodService.delete(fno);
         redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
         redirectAttributes.addAttribute("size",pageRequestDTO.getSize());
-        return "redirect:/food/list";
+        return "redirect:/food/list?"+pageRequestDTO.getLink();
     }
 
 

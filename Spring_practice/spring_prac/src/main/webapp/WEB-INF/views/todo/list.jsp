@@ -62,21 +62,21 @@
                         <form action="/todo/list" method="get">
                             <input type="hidden" name="size" value="${pageRequestDTO.size}">
                             <div class="mb-3">
-                                <input type="checkbox" name="finished">완료여부
+                                <input type="checkbox" name="finished" ${pageRequestDTO.finished ?"checked":""}>완료여부
                             </div>
                             <div class="mb-3">
-                                <input type="checkbox" name="types" value="t">제목
-                                <input type="checkbox" name="types" value="w">작성자
-                                <input type="text" name="keyword" class="form-control">
+                                <input type="checkbox" name="types" value="t" ${pageRequestDTO.checkType("t")?"checked":""}>제목
+                                <input type="checkbox" name="types" value="w" ${pageRequestDTO.checkType("w")?"checked":""}>작성자
+                                <input type="text" name="keyword" class="form-control" value="${pageRequestDTO.keyword}">
                             </div>
                             <div class="input-group mb-3 dueDateDiv">
-                                <input type="date" name="from" class="form-control">
-                                <input type="date" name="to" class="form-control">
+                                <input type="date" name="from" class="form-control" value="${pageRequestDTO.from}">
+                                <input type="date" name="to" class="form-control" value="${pageRequestDTO.to}">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="float-end">
                                     <button class="btn btn-primary" type="submit">검색</button>
-                                    <button class="btn btn-secondary" type="reset">초기화</button>
+                                    <button class="btn btn-secondary clearBtn" type="reset">초기화</button>
                                 </div>
                             </div>
                         </form>
@@ -92,9 +92,9 @@
             <div class="col">
                 <!--        카드 시작 부분-->
                 <div class="card">
-<%--                    <div class="card-header">--%>
-<%--                        Featured--%>
-<%--                    </div>--%>
+                    <%--                    <div class="card-header">--%>
+                    <%--                        Featured--%>
+                    <%--                    </div>--%>
                     <div class="card-body">
                         <%--                        Todo List 부분 작성--%>
                         <h5 class="card-title">리스트 목록</h5>
@@ -203,7 +203,18 @@
             const num = target.getAttribute("data-num")
 
             //백틱, 숫자 키보드 1번 왼쪽
-            self.location = `/todo/list?page=\${num}`
+            // self.location = `/todo/list?page=\${num}`
+            const formObj = document.querySelector("form")
+            formObj.innerHTML += `<input type='hidden' name='page' value='\${num}'>`
+            formObj.submit()
+        }, false)
+
+    document.querySelector(".clearBtn").addEventListener("click",
+        function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            self.location = "/todo/list"
         }, false)
 
 
