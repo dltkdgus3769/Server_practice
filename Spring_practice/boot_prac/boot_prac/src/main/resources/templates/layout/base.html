@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>베이스레이아웃</title>
+</head>
+<body>
+<div> <h1>샘플 헤더 부분</h1></div>
+
+<div layout:fragment="content">
+    <p>여기 부분이 각 페이지마다 나오는 화면</p>
+</div>
+
+<div>
+    <h1> 샘플 푸터 영역</h1>
+</div>
+
+<th:block layout:fragment="javascript">
+
+</th:block>
+</body>
+</html>

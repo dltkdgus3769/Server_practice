@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<!--공통 레이아웃의 경로를 설정-->
+<!--layout:decorate="~{layout/base.html}"-->
+
+<body>
+<div layout:fragment="content">
+    <h1>register.html 화면입니다. </h1>
+
+    <h2>링크 이동</h2>
+    <a th:href="@{/todo/list}">list.html로 단순 이동</a>
+</div>
+
+<script layout:fragment="javascript" th:inline="javascript">
+    const arr = [[${list}]]
+    console.log(arr)
+</script>
+
+</body>
+</html>

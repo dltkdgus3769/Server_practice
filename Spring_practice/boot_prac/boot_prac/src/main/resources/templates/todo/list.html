@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+
+<body>
+<div layout:fragment="content">
+    <h1>list.html 화면입니다. </h1>
+
+    <hr/>
+    <ul>
+        <h3>반복문 이용</h3>
+        <li th:each="str:${strList}" th:text="${str}"></li>
+    </ul>
+    <hr/>
+    <ul>
+        <h3>조건문 이용</h3>
+        <li th:each="str , status: ${strList}" >
+            <span th:if="${status.odd}"> 홀수  [[${str}]]</span>
+            <span th:unless="${status.odd}"> 짝수  [[${str}]]</span>
+        </li>
+    </ul>
+    <hr/>
+    <ul>
+        <h3>삼항 연산자 이용</h3>
+        <li th:each="str , status: ${strList}" >
+            <span th:text="${status.odd}?'홀수---'+${str} : '짝수---'+${str}"></span>
+        </li>
+    </ul>
+    <hr/>
+    <ul>
+        <h3>switch 이용</h3>
+        <li th:each="str , status: ${strList}" >
+            <th:block th:switch="${status.index % 3}">
+                <span th:case="0"> index:0  [[${str}]]</span>
+                <span th:case="1"> index:1  [[${str}]]</span>
+                <span th:case="2"> index:2  [[${str}]]</span>
+            </th:block>
+        </li>
+    </ul>
+    <hr/>
+    <h3>변수 사용</h3>
+    <div th:with="num1=${10}, num2=${20}">
+        num1 : <h2 th:text="${num1}"></h2>
+        num2 : <h2 th:text="${num2}"></h2>
+        num1 + num2 : <h2 th:text="${num1+num2}"></h2>
+    </div>
+
+    <hr/>
+    <h2>링크 이동</h2>
+    <a th:href="@{/todo/register}">register.html로 단순 이동</a>
+    <br>
+    <a th:href="@{/todo/register(name='이상현',age=30)}">register.html로 이동시 쿼리스트링 추가</a>
+
+</div>
+<script layout:fragment="javascript" th:inline="javascript">
+    const arr = [[${strList}]]
+    console.log(arr)
+</script>
+
+</body>
+</html>
