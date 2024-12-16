@@ -76,4 +76,58 @@ public class BoardRepositoryTest {
         log.info("현재 페이지 번호:"+result.getNumber());
         log.info("크기:"+result.getSize());
     }
+
+    @Test
+    public void testQueryString(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        Page<Board> result = boardRepository.findByTitleContainingOrderByBnoDesc("3",pageable);
+        log.info("총 개수:"+result.getTotalElements());
+        log.info("10개씩 나눠진 데이터 총페이지:"+result.getTotalPages());
+        log.info("페이징 된 결과물 10개:"+result.getContent());
+        log.info("현재 페이지 번호:"+result.getNumber());
+        log.info("크기:"+result.getSize());
+
+    }
+
+    @Test
+    public void testQueryAnotation(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        Page<Board> result = boardRepository.findByKeyword("3",pageable);
+        log.info("총 개수:"+result.getTotalElements());
+        log.info("10개씩 나눠진 데이터 총페이지:"+result.getTotalPages());
+        log.info("페이징 된 결과물 10개:"+result.getContent());
+        log.info("현재 페이지 번호:"+result.getNumber());
+        log.info("크기:"+result.getSize());
+    }
+
+    @Test
+    public void testQuerydsl(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        boardRepository.search(pageable);
+//        Page<Board> result = boardRepository.findByKeyword("3",pageable);
+
+//        log.info("총 개수:"+result.getTotalElements());
+//        log.info("10개씩 나눠진 데이터 총페이지:"+result.getTotalPages());
+//        log.info("페이징 된 결과물 10개:"+result.getContent());
+//        log.info("현재 페이지 번호:"+result.getNumber());
+//        log.info("크기:"+result.getSize());
+    }
+
+    @Test
+    public void testQuerydsl2(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        //전달할 준비물
+        //1) 검색어, 2)검색유형
+        String keyword = "3";
+        String[] types = {"t","w","c"};
+        Page<Board> result = boardRepository.searchAll(types,keyword,pageable);
+
+        log.info("총 개수:"+result.getTotalElements());
+        log.info("10개씩 나눠진 데이터 총페이지:"+result.getTotalPages());
+        log.info("페이징 된 결과물 10개:"+result.getContent());
+        log.info("현재 페이지 번호:"+result.getNumber());
+        log.info("크기:"+result.getSize());
+        log.info("다음여부:"+result.hasNext());
+        log.info("이전여부:"+result.hasPrevious());
+    }
 }
