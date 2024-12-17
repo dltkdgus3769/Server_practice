@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Controller
 @Log4j2
 @RequestMapping("/board")
@@ -67,10 +70,13 @@ public class BoardController {
     @PostMapping("/update")
     public String updatePost(@Valid BoardDTO boardDTO, BindingResult bindingResult, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes,
     String keyword2, String page2, String type2) {
+
+        String encodedKeyword = URLEncoder.encode(keyword2, StandardCharsets.UTF_8);
+
         if(bindingResult.hasErrors()) {
             log.info("has errors: 유효성 에러 발생");
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/board/update?bno="+boardDTO.getBno()+"&keyword="+keyword2+"&page="+page2+"&type="+type2;
+            return "redirect:/board/update?bno="+boardDTO.getBno()+"&keyword="+encodedKeyword+"&page="+page2+"&type="+type2;
 
         }
         boardService.update(boardDTO);
@@ -78,16 +84,18 @@ public class BoardController {
         redirectAttributes.addFlashAttribute("result", "수정된 bno:"+boardDTO.getBno());
         redirectAttributes.addFlashAttribute("resultType", "update");
 
-        return "redirect:/board/read?bno="+boardDTO.getBno()+"&keyword="+keyword2+"&page="+page2+"&type="+type2;
+        return "redirect:/board/read?bno="+boardDTO.getBno()+"&keyword="+encodedKeyword+"&page="+page2+"&type="+type2;
     }
 
     @PostMapping("/delete")
     public String delete(Long bno, RedirectAttributes redirectAttributes,String keyword2, String page2, String type2) {
         boardService.delete(bno);
+        String encodedKeyword = URLEncoder.encode(keyword2, StandardCharsets.UTF_8);
+
         redirectAttributes.addFlashAttribute("resultType", "delete");
         redirectAttributes.addFlashAttribute("result", "삭제되었습니다.");
 
-        return "redirect:/board/list?"+"keyword="+keyword2+"&page="+page2+"&type="+type2;
+        return "redirect:/board/list?"+"keyword="+encodedKeyword+"&page="+page2+"&type="+type2;
     }
 
 
