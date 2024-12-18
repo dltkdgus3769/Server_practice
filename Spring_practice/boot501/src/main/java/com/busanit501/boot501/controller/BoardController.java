@@ -1,6 +1,7 @@
 package com.busanit501.boot501.controller;
 
 import com.busanit501.boot501.dto.BoardDTO;
+import com.busanit501.boot501.dto.BoardListReplyCountDTO;
 import com.busanit501.boot501.dto.PageRequestDTO;
 import com.busanit501.boot501.dto.PageResponseDTO;
 import com.busanit501.boot501.service.BoardService;
@@ -30,7 +31,8 @@ public class BoardController {
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model ) {
         // 서비스 이용해서, 데이터베이스 목록 페이징 처리해서 가져오기.
-        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+//        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+        PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
         model.addAttribute("responseDTO", responseDTO);
     }
 

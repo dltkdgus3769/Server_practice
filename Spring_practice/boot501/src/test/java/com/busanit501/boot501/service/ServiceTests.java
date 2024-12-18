@@ -1,8 +1,10 @@
 package com.busanit501.boot501.service;
 
 import com.busanit501.boot501.dto.BoardDTO;
+import com.busanit501.boot501.dto.BoardListReplyCountDTO;
 import com.busanit501.boot501.dto.PageRequestDTO;
 import com.busanit501.boot501.dto.PageResponseDTO;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
-@Slf4j
+@Log4j2
 @SpringBootTest
 public class ServiceTests {
     @Autowired
@@ -68,6 +70,21 @@ public class ServiceTests {
                         .build();
 
         PageResponseDTO<BoardDTO> list = boardService.list(pageRequestDTO);
+        log.info("list: " + list.toString());
+    }
+
+    @Test
+    public void testSelectAllBoardWithReplyCount() {
+
+        PageRequestDTO pageRequestDTO =
+                PageRequestDTO.builder()
+                        .page(1)
+                        .type("tcw")
+                        .keyword("샘플")
+                        .size(10)
+                        .build();
+
+        PageResponseDTO<BoardListReplyCountDTO> list = boardService.listWithReplyCount(pageRequestDTO);
         log.info("list: " + list.toString());
     }
 }

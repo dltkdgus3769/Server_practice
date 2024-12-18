@@ -2,6 +2,7 @@ package com.busanit501.boot501.service;
 
 import com.busanit501.boot501.domain.Board;
 import com.busanit501.boot501.dto.BoardDTO;
+import com.busanit501.boot501.dto.BoardListReplyCountDTO;
 import com.busanit501.boot501.dto.PageRequestDTO;
 import com.busanit501.boot501.dto.PageResponseDTO;
 import com.busanit501.boot501.repository.BoardRepository;
@@ -79,4 +80,24 @@ public class BoardServiceImpl implements BoardService {
                 .build();
 
     } // list
+
+    @Override
+    public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("bno");
+
+        Page<BoardListReplyCountDTO> result = boardRepository.searchWithReplyCount(types,keyword,pageable);
+
+//        List<BoardListReplyCountDTO> dtoList = result.getContent().stream()
+//                .map(board ->modelMapper.map(board, BoardListReplyCountDTO.class))
+//                .collect(Collectors.toList());
+
+
+        return PageResponseDTO.<BoardListReplyCountDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(result.getContent())
+                .total((int) result.getTotalElements())
+                .build();
+    }
 }

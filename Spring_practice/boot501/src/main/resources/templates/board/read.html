@@ -57,8 +57,29 @@
         <!--        col-->
     </div>
     <!--    row-->
+<!--    댓글 목록,댓글 추가 버튼 화면 작업-->
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="my-4">
+                <button class="btn btn-info addReplyBtn">댓글 등록</button>
+            </div>
+            <ul class="list-group replyList">
 
+            </ul>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <ul class="pagination replyPaging">
 
+                </ul>
+            </div>
+        </div>
+    </div>
+
+<!--    axios 도구, 비동기 식 처리 문법 마치 동기화된 코드 처럼 이용 가능 문법-->
+<!--    async, await 키워드 이용, 비동기 처리 쉽게 동기화 코드처럼 이용가능-->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/reply.js"></script>
 </div>
 <!--끝 나는 부분 layout:fragment="content"-->
 
@@ -74,6 +95,19 @@
         self.location = `/board/update?bno=`+[[${dto.bno}]]+"&"+[[${pageRequestDTO.getLink()}]]
     }, false);
 
+    const bno = [[${dto.bno}]]
+
+    function printReplies(page,size,goLast) {
+        getList({bno,page,size,goLast})
+            .then(
+                data => console.log(data)
+            )
+            .catch(e =>{
+                console.error(e)
+                }
+            )
+    }
+    printReplies(1,10)
 
 </script>
 
