@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @SpringBootTest
 @Log4j2
 public class ReplyRepositoryTests {
@@ -90,6 +92,16 @@ public class ReplyRepositoryTests {
         log.info("result.getSize() 크기  :" +result.getSize());
         log.info("result.hasNext() 다음  :" +result.hasNext());
         log.info("result.hasPrevious() 이전  :" +result.hasPrevious());
+    }
+
+    //하나조회
+    @Test
+    @Transactional
+    public void testSelectOneReply(){
+
+        Optional<Reply> result = replyRepository.findById(2040L);
+        Reply reply=result.orElseThrow();
+        log.info("하나조회 결과:"+reply);
     }
 
 }

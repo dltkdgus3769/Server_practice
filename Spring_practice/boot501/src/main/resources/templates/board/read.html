@@ -57,7 +57,7 @@
         <!--        col-->
     </div>
     <!--    row-->
-<!--    댓글 목록,댓글 추가 버튼 화면 작업-->
+    <!--    댓글 목록,댓글 추가 버튼 화면 작업-->
     <div class="row mt-3">
         <div class="col-md-12">
             <div class="my-4">
@@ -75,11 +75,67 @@
             </div>
         </div>
     </div>
+    <!--댓글 등록 모달창1-->
+    <div class="modal fade registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">댓글 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!--                    댓글 등록 입력폼 추가-->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">내용</span>
+                        <input type="text" class="form-control replyText">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">작성자</span>
+                        <input type="text" class="form-control replyer">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary registerCloseBtn" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary registerBtn">댓글 등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--댓글 등록 모달창1-->
 
-<!--    axios 도구, 비동기 식 처리 문법 마치 동기화된 코드 처럼 이용 가능 문법-->
-<!--    async, await 키워드 이용, 비동기 처리 쉽게 동기화 코드처럼 이용가능-->
+    <!--    댓글 수정 모달창2-->
+    <div class="modal fade updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title replyHeader"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!--                    댓글 등록 입력폼 추가-->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">내용</span>
+                        <input type="text" class="form-control updateReplyText">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">작성자</span>
+                        <input type="text" class="form-control updateReplyer">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary updateCloseBtn" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary updateBtn">댓글 수정</button>
+                    <button type="button" class="btn btn-danger deleteBtn">댓글 삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    댓글 수정 모달창2-->
+    <!--    axios 도구, 비동기 식 처리 문법 마치 동기화된 코드 처럼 이용 가능 문법-->
+    <!--    async, await 키워드 이용, 비동기 처리 쉽게 동기화 코드처럼 이용가능-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/reply.js"></script>
+
 </div>
 <!--끝 나는 부분 layout:fragment="content"-->
 
@@ -92,22 +148,194 @@
 
     //수정폼으로 이동
     document.querySelector(".submitBtn").addEventListener("click", function (e) {
-        self.location = `/board/update?bno=`+[[${dto.bno}]]+"&"+[[${pageRequestDTO.getLink()}]]
+        self.location = `/board/update?bno=` + [[${dto.bno}]] + "&" + [[${pageRequestDTO.getLink()}]]
     }, false);
 
     const bno = [[${dto.bno}]]
 
-    function printReplies(page,size,goLast) {
-        getList({bno,page,size,goLast})
+    function printReplies(page, size, goLast) {
+        getList({bno, page, size, goLast})
             .then(
-                data => console.log(data)
+                // data => console.log(data)
+                data => {
+                    printList(data.dtoList)
+                    printPages(data)
+                }
             )
-            .catch(e =>{
-                console.error(e)
+            .catch(e => {
+                    console.error(e)
                 }
             )
     }
-    printReplies(1,10)
+
+    printReplies(1, 10, true)
+
+    const replyList = document.querySelector('.replyList')
+    const replyPaging = document.querySelector('.replyPaging')
+
+    function printList(dtoList) {
+        let str = ""
+        if (dtoList && dtoList.length > 0) {
+            for (const dto of dtoList) {
+                str += `
+                <li class="list-group-item d-flex replyItem">
+                <span class="col-2">${dto.rno}</span>
+                <span class="col-6" data-rno="${dto.rno}">${dto.replyText}</span>
+                <span class="col-2">${dto.replyer}</span>
+                <span class="col-2">${dto.regDate}</span>
+                </li>
+                `
+            }
+        }
+        replyList.innerHTML = str
+    }
+
+    function printPages(data) {
+        let pageStr = ''
+
+        if (data.prev) {
+            pageStr += `<li class="page-item"><a class="page-link"
+            data-page="${data.start - 1}">이전</a></li>
+            `
+        }
+        for (let i = data.start; i <= data.end; i++) {
+            pageStr += `<li class="${data.page == i}?'page-item active':'page-item'">
+                        <a class="page-link" data-page="${i}">${i}</a>
+
+            `
+        }
+        if (data.next) {
+            pageStr += `<li class="page-item"><a class="page-link"
+            data-page="${data.end + 1}">다음</a></li>
+            `
+        }
+        replyPaging.innerHTML = pageStr
+    }
+
+    //페이징 번호 이벤트 핸들러 추가
+    let page = 1
+    let size = 10
+    replyPaging.addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const target = e.target
+
+        if (!target || target.tagName != 'A') {
+            return
+        }
+        const pageNum = target.getAttribute("data-page")
+        page = pageNum
+        printReplies(page, size)
+
+    }, false)
+
+    //댓글 등록 버튼 이벤트 처리 작업, 모달창 띄우기
+    const registerModal = new bootstrap.Modal(document.querySelector(".registerModal"))
+    const registerBtn = document.querySelector(".registerBtn")
+    const registerCloseBtn = document.querySelector(".registerCloseBtn")
+    const replyText = document.querySelector(".replyText")
+    const replyer = document.querySelector(".replyer")
+
+    document.querySelector(".addReplyBtn").addEventListener("click", function (e) {
+        registerModal.show()
+    })
+    registerCloseBtn.addEventListener("click", function (e) {
+        registerModal.hide()
+    })
+    //댓글 등록 로직 처리
+    registerBtn.addEventListener("click", function (e) {
+        const replyObj = {
+            bno: bno,
+            replyText: replyText.value,
+            replyer: replyer.value
+        }
+        addReply(replyObj).then(
+            result => {
+                alert("댓글 작성 번호:" + result.rno)
+                registerModal.hide()
+                replyText.value = ''
+                replyer.value = ''
+                printReplies(1, 10)
+            }
+        )
+            .catch(e => {
+                alert("예외가 발생함")
+            })
+    }, false)
+
+    //댓글 수정 모달창 띄우기, 이벤트 처리, 댓글 내용 클릭시 띄우기
+    const updateModal = new bootstrap.Modal(document.querySelector(".updateModal"))
+    const updateBtn = document.querySelector(".updateBtn")
+    const replyHeader = document.querySelector(".replyHeader")
+    const updateCloseBtn = document.querySelector(".updateCloseBtn")
+    const updateReplyText = document.querySelector(".updateReplyText")
+    const updateReplyer = document.querySelector(".updateReplyer")
+    const deleteBtn = document.querySelector(".deleteBtn")
+
+    //이벤트 처리, 댓글 수정 모달창 띄우기
+    replyList.addEventListener("click",function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        const target = e.target
+
+        if (!target || target.tagName != 'SPAN') {
+            return;
+        }
+        const rno = target.getAttribute("data-rno")
+        if(!rno){
+            return;
+        }
+        getReply(rno).then(reply =>{
+            console.log("하나 조회 : replyDTO : " + reply)
+            // 모달 창 화면에 , 조회한 댓글 내용과, 작성자 표기 , 주입.
+            replyHeader.innerHTML = reply.rno
+            updateReplyText.value = reply.replyText
+            updateReplyer.value = reply.replyer
+            updateModal.show()
+        })
+            .catch(e=>alert("예외 발생함"))
+    },false)
+
+    //댓글 수정 로직처리
+    updateBtn.addEventListener("click", function(e){
+        const replyObj = {
+            bno: bno,
+            rno: replyHeader.innerHTML,
+            replyText: updateReplyText.value,
+            replyer: updateReplyer.value
+        }
+        updateReply(replyObj).then(
+            result => {
+                alert(result.rno+ "번 댓글 수정 완료:")
+                updateModal.hide()
+                updateReplyText.value = ''
+                updateReplyer.value = ''
+                printReplies(page,size)
+            }
+        )
+            .catch(e => {
+                alert("댓글 수정 실패")
+            })
+    },false)
+
+    //댓글 삭제 로직처리
+    deleteBtn.addEventListener("click", function(e){
+        const rno = replyHeader.innerHTML
+        deleteReply(rno).then(
+            result => {
+                alert(result.rno+ "번 댓글 삭제 완료:")
+                updateModal.hide()
+                updateReplyText.value = ''
+                updateReplyer.value = ''
+                printReplies(page,size)
+            }
+        )
+            .catch(e => {
+                alert("댓글 삭제 실패")
+            })
+    },false)
 
 </script>
 

@@ -30,7 +30,8 @@ public class Reply extends BaseEntity {
         this.board = board;
     }
 
-    public void changeReplyText(String replyText) {
+    public void changeReplyTextReplyer(String replyText, String replyer) {
         this.replyText = replyText;
+        this.replyer = replyer;
     }
 }
