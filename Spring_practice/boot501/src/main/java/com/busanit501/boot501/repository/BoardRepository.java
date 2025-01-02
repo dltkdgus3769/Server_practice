@@ -4,8 +4,11 @@ import com.busanit501.boot501.domain.Board;
 import com.busanit501.boot501.repository.search.BoardSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch {
 //public interface BoardRepository extends JpaRepository<Board, Long>{
@@ -25,4 +28,10 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch
     // nativeQuery = true
     @Query(value = "select now()" , nativeQuery = true)
     String now();
+
+    // 조회시, 특정의 속성을 같이 조회를 함.
+    @EntityGraph(attributePaths = {"imageSet"})
+    @Query("select b from Board b where b.bno=:bno")
+    Optional<Board> findByIdWithImages(Long bno);
+
 }

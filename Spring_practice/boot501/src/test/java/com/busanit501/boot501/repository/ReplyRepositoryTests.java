@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -27,7 +28,7 @@ public class ReplyRepositoryTests {
     public void testInsert() {
         // 댓글을 작성 하려면, 부모 게시글 번호가 필요,
         // 각자 데이터베이스에 따라서, 다르므로 꼭 확인하고, 작업.
-        Long bno = 1L;
+        Long bno = 3L;
 
         Board board = Board.builder().bno(bno).build();
 
@@ -102,6 +103,15 @@ public class ReplyRepositoryTests {
         Optional<Reply> result = replyRepository.findById(2040L);
         Reply reply=result.orElseThrow();
         log.info("하나조회 결과:"+reply);
+    }
+
+    @Test
+    @Transactional
+    public void testSelectReplyWithBoardBno(){
+        Long bno=103L;
+        List<Reply> replyList = replyRepository.findByBoardBno(bno);
+        replyList.forEach(reply -> log.info("게시글 조회 : "+reply));
+
     }
 
 }

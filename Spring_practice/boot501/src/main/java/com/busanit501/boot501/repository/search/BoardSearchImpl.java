@@ -4,17 +4,24 @@ package com.busanit501.boot501.repository.search;
 import com.busanit501.boot501.domain.Board;
 import com.busanit501.boot501.domain.QBoard;
 import com.busanit501.boot501.domain.QReply;
+import com.busanit501.boot501.dto.BoardImageDTO;
+import com.busanit501.boot501.dto.BoardListAllDTO;
 import com.busanit501.boot501.dto.BoardListReplyCountDTO;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Log4j2
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch {
 
     //부모 클래스 초기화, 사용하는 엔티티 클래스 설정.
@@ -138,6 +145,91 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
         return result;
     }
+
+    @Override
+    public Page<BoardListAllDTO> searchWithAll(String[] types, String keyword, Pageable pageable) {
+        QBoard board = QBoard.board;
+        QReply reply = QReply.reply;
+        JPQLQuery<Board> boardJPQLQuery = from(board);// select * from board
+        boardJPQLQuery.leftJoin(reply).on(reply.board.bno.eq(board.bno));
+
+        if (types != null && types.length > 0 && keyword != null) {
+            // 여러 조건을 하나의 객체에 담기.
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            for (String type : types) {
+                switch (type) {
+                    case "t":
+                        booleanBuilder.or(board.title.contains(keyword));
+                        break;
+                    case "c":
+                        booleanBuilder.or(board.content.contains(keyword));
+                        break;
+                    case "w":
+                        booleanBuilder.or(board.writer.contains(keyword));
+                        break;
+                } // switch
+            }// end for
+            // where 조건을 적용해보기.
+            boardJPQLQuery.where(booleanBuilder);
+        } //end if
+        // bno >0
+        boardJPQLQuery.where(board.bno.gt(0L));
+
+        boardJPQLQuery.groupBy(board);
+        this.getQuerydsl().applyPagination(pageable, boardJPQLQuery);
+
+
+
+        JPQLQuery<Tuple> tupleJPQLQuery = boardJPQLQuery.select(
+          // 게시글과, 댓글 갯수 조회 결과
+                board,reply.countDistinct()
+        );
+        List<Tuple> tupleList = tupleJPQLQuery.fetch();
+        List<BoardListAllDTO> dtoList = tupleList.stream().map(tuple ->{
+            Board board1=  (Board)tuple.get(board);
+            long replyCount = tuple.get(1,Long.class);
+            BoardListAllDTO dto = BoardListAllDTO.builder()
+                    .bno(board1.getBno())
+                    .title(board1.getTitle())
+                    .writer(board1.getWriter())
+                    .regDate(board1.getRegDate())
+                    .replyCount(replyCount).build();
+
+            //첨부이미지 추가, 추가1
+            List<BoardImageDTO> imageDTO = board1.getImageSet().stream().sorted().map(boardImage ->
+                BoardImageDTO.builder()
+                        .uuid(boardImage.getUuid())
+                        .fileName(boardImage.getFileName())
+                        .ord(boardImage.getOrd())
+                        .build()
+            ).collect(Collectors.toList());
+            dto.setBoardImages(imageDTO);
+            return dto;
+        }).collect(Collectors.toList());
+
+        long totalCount = boardJPQLQuery.fetchCount();
+        Page<BoardListAllDTO> page = new PageImpl<>(dtoList, pageable, totalCount);
+        return page;
+    }
+
+//    @Override
+//    public Page<BoardListAllDTO> searchWithAll(String[] types, String keyword, Pageable pageable) {
+//        QBoard board = QBoard.board;
+//        QReply reply = QReply.reply;
+//        JPQLQuery<Board> boardJPQLQueryuery = from(board);// select * from board
+//        boardJPQLQueryuery.leftJoin(reply).on(reply.board.bno.eq(board.bno));
+//        this.getQuerydsl().applyPagination(pageable, boardJPQLQueryuery);
+//
+//        // 페이징 된 데이터 가져오기
+//        List<Board> boardList = boardJPQLQueryuery.fetch();
+//
+//        boardList.forEach(board1 -> {
+//            log.info("board1:" + board1.getBno());
+//            log.info("board1:" + board1.getImageSet());
+//        });
+//
+//        return null;
+//    }
 
 
 }
